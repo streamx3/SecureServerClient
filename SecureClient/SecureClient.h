@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QSslSocket>
+#include <QSslConfiguration>
 #include <QTimer>
 #include <QException>
 

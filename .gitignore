@@ -46,6 +46,7 @@ Thumbs.db
 *Makefile
 
 # build dir & files
+build/
 moc/
 obj/
 ui/

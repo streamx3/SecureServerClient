@@ -36,8 +36,7 @@ void New_sClient::sl_DataAvailable()
     emit si_newData(unique_id,rcv_data);
 
     QByteArray ack = "ACK OK at ";
-    ack.append(QDateTime::currentDateTime().toString("yyyy/MM/dd hh:ss:ss:zzz"));
-    Obj_TcpSocket->write(ack);
+    ack.append(QByteArray::fromHex(QDateTime::currentDateTime().toString("yyyy/MM/dd hh:ss:ss:zzz").toUtf8()));
     Obj_TcpSocket->waitForBytesWritten();
 }
 

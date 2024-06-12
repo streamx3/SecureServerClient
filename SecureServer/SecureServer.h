@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QSslKey>
 #include <QSslCertificate>
+#include <QSslConfiguration>
 #include <QTimer>
 
 struct uniqueid

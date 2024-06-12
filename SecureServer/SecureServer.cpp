@@ -81,13 +81,23 @@ void SecureServer::sl_acptError(QAbstractSocket::SocketError acpt_err)
 void SecureServer::incomingConnection(qintptr socketDescriptor)
 {
     QSslSocket *sslSocket = new QSslSocket(this);
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSslConfiguration sslConfig;
+    sslConfig.addCaCertificates(":/certs/arise1600_ca.crt");    
+#endif
+    if(nullptr == sslSocket)
+        return;
 
     connect(sslSocket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sl_sslErrors(QList<QSslError>)));
     if(sslSocket->setSocketDescriptor(socketDescriptor))
     {
         sslSocket->setPrivateKey(key);
         sslSocket->setLocalCertificate(cert);
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+        sslSocket->setSslConfiguration(sslConfig);
+#else
         sslSocket->addCaCertificates(":/certs/arise1600_ca.crt");
+#endif
         sslSocket->setPeerVerifyMode(QSslSocket::VerifyPeer);
         sslSocket->startServerEncryption();
 

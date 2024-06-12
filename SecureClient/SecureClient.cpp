@@ -10,6 +10,12 @@
 
 SecureClient::SecureClient(QString host, int port)
 {
+
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSslConfiguration sslConfig;
+#endif
+
+
     m_UpdateCredentials(host,port);
     Obj_TcpSocket = new QSslSocket;
 
@@ -19,7 +25,11 @@ SecureClient::SecureClient(QString host, int port)
     connect (Obj_TcpSocket, SIGNAL(disconnected()), this, SLOT(sl_Disconnected()));
     connect (Obj_TcpSocket, SIGNAL(sslErrors(QList<QSslError>)), this, SLOT(sl_sslErrors(QList<QSslError>)));
 
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    bool isAddCert = sslConfig.addCaCertificates(":/certs/arise1600_ca.crt");
+#else
     bool isAddCert = Obj_TcpSocket->addCaCertificates(":/certs/arise1600_ca.crt");
+#endif
     Obj_TcpSocket->setPrivateKey(":/certs/arise1600_local.key");
     Obj_TcpSocket->setLocalCertificate(":/certs/arise1600_local.crt");
     Obj_TcpSocket->setPeerVerifyMode(QSslSocket::VerifyPeer);
